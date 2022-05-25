@@ -3,16 +3,18 @@ from ursina.prefabs.first_person_controller import FirstPersonController
 
 app = Ursina()
 window.fullscreen = True
+window.exit_button.enabled = False
+mouse.visible = False
 Sky(texture='sky')
 
 
 class Demon:
     def __init__(self, health, speed, damage):
-        self.demon = Entity(model='sphere', color=color.white, texture='deamon', scale=10, position=(2, 10, 20),
-                            collider='sphere')
+        self.demon = Entity(model='sphere', color=color.white, texture='deamon', scale=10, position=(2, 10, 20), collider='sphere')
         self.health = health
         self.speed = speed
         self.damage = damage
+        self.demon.look_at(player)
 
     def aggro(self):
         if player.x > self.demon.x and distance(self.demon.position, player.position) > 2:
@@ -34,18 +36,15 @@ class Demon:
             # player.setHealth(player.getHealth() - self.damage)
             pass
 
-
     def die(self):
         destroy(self.demon)
 
 
 class Slayer:
     def __init__(self):
+        self.slayer = Entity(model='cube', color=color.green, position=(player.x, player.y + 1, player.z), scale=(1, 2, 1))
         self.hp = 100
         self.ammo = 0
-        self.x = 0
-        self.y = 0
-        self.z = 0
         self.shoot = True
 
     def get_health(self):
@@ -71,17 +70,21 @@ class Slayer:
             demon
             entity'''
 
+    def move(self):
+        self.slayer.position = (player.x, player.y + 1, player.z)
+        self.slayer.look_at(demon)
+
 
 class Projectile:
 
     def __init__(self, pos):
-        self.projectile = Entity(model='sphere', color=color.orange, scale=1, position=pos
+        self.projectile = Entity(model='sphere', color=color.orange, scale=1, position=pos)
         self.fire()
 
     def fire(self):
         self.projectile.look_at(player)
         self.projectile.speed = 30
-        if (self.projectile.distance(player) < .5):
+        if self.projectile.distance(player) < .5:
             # player.setHealth(player.health - 5)
             destroy(self.projectile)
         destroy(self.projectile, delay=3)
@@ -93,6 +96,7 @@ player.scale = 1.5
 player.jump_height = 4
 
 demon = Demon(10, 5, 2)
+slayer = Slayer()
 
 ground = Entity(model='plane', color=color.red, texture="grass", scale=100, position=(0, 0, 0), collider='mesh')
 wall = [
@@ -119,6 +123,7 @@ def update():
     try:
         demon.notice()
         demon.attack()
+        slayer.move()
     except:
         pass
 
