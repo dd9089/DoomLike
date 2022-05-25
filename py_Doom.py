@@ -42,7 +42,7 @@ class Demon:
 
 class Slayer:
     def __init__(self):
-        self.slayer = Entity(model='cube', color=color.green, position=(player.x, player.y + 1, player.z), scale=(1, 2, 1))
+        self.slayer = Entity(model='sphere', color=color.green, position=player.position, scale=(0.5, 0.5, 1.5))
         self.hp = 100
         self.ammo = 0
         self.shoot = True
@@ -63,7 +63,7 @@ class Slayer:
 
     def shoot(self):
         self.ammo = self.ammo - 1
-        '''if ():#crosshairs over demon):
+        '''if (crosshairs over demon):
             demonHealth = demonHealth - 20
         if (demonHealth = 0 or demonHealth < 0):
             remove
@@ -71,8 +71,50 @@ class Slayer:
             entity'''
 
     def move(self):
-        self.slayer.position = (player.x, player.y + 1, player.z)
-        self.slayer.look_at(demon)
+        self.slayer.position = (player.x + 0.3, player.y + 2.5, player.z + 0.3)
+        #self.slayer.look_at(mouse.point)
+
+
+
+class Demon2:
+
+    def __init__(self, health, speed, damage):
+        self.demon = Entity(model='rectangle', color=color.white, texture = 'deamon', scale = (2, 4, 2), position = (2, 10, 20), collider = 'rectangle')
+        self.health = health
+        self.speed = speed
+        self.damage = damage
+
+    def aggro(self):
+       if player.x > self.demon.x and distance(self.demon.position, player.position) > 2:
+           self.demon.x += .05
+       if player.x < self.demon.x and distance(self.demon.position, player.position) > 2:
+           self.demon.x -= .05
+       if player.z > self.demon.z and distance(self.demon.position, player.position) > 2:
+           self.demon.z += .05
+       if player.z < self.demon.z and distance(self.demon.position, player.position) > 2:
+           self.demon.z -= .05
+
+    def notice(self):
+       if distance(self.demon.position, player.position) >= 30:
+           self.aggro()
+
+    def attack(self):
+        count = 0
+
+        if distance(self.demon.position, player.position) <= 10:
+            while count < 15:
+                if player.x > self.demon.x and distance(self.demon.position, player.position) > 2:
+                    self.fireBall.x += .05
+                    count += 1
+                if player.x < self.demon.x and distance(self.demon.position, player.position) > 2:
+                    self.fireBall.x -= .05
+                    count += 1
+        elif distance(self.demon.position, player.position) <= 1:
+           #player.setHealth(player.getHealth() - self.damage)
+               pass
+
+    def die(self):
+       destroy(self.demon)
 
 
 class Projectile:
