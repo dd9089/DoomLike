@@ -34,6 +34,7 @@ class Demon:
             # player.setHealth(player.getHealth() - self.damage)
             pass
 
+
     def die(self):
         destroy(self.demon)
 
@@ -69,6 +70,21 @@ class Slayer:
             remove
             demon
             entity'''
+
+
+class Projectile:
+
+    def __init__(self, pos):
+        self.projectile = Entity(model='sphere', color=color.orange, scale=1, position=pos
+        self.fire()
+
+    def fire(self):
+        self.projectile.look_at(player)
+        self.projectile.speed = 30
+        if (self.projectile.distance(player) < .5):
+            # player.setHealth(player.health - 5)
+            destroy(self.projectile)
+        destroy(self.projectile, delay=3)
 
 
 player = FirstPersonController()
