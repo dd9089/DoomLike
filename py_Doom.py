@@ -3,6 +3,7 @@ from ursina.prefabs.first_person_controller import FirstPersonController
 
 app = Ursina()
 window.fullscreen = True
+Sky(texture='sky')
 
 
 class Demon:
@@ -38,6 +39,7 @@ class Demon:
 player = FirstPersonController()
 player.position = (0, 0, 0)
 player.scale = 1.5
+player.jump_height = 4
 
 demon = Demon(10, 5, 2)
 
@@ -64,7 +66,6 @@ def update():
         demon.attack()
     except:
         pass
-
 
 
 app.run()
