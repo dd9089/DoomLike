@@ -22,6 +22,7 @@ class Demon:
             self.demon.z += .05
         if player.z < self.demon.z and distance(self.demon.position, player.position) > 2:
             self.demon.z -= .05
+        self.demon.look_at(player)
 
     def notice(self):
         if distance(self.demon.position, player.position) >= 30:
@@ -66,6 +67,6 @@ def update():
         demon.attack()
     except:
         pass
-
+    
 
 app.run()
